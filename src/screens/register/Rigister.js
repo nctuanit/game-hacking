@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 // import LinearGradient from 'react-native-linear-gradient';
 
-function Login() {
+function Rigister() {
   const [userNanme, onChangeUsername] = useState('');
   const [pass, onChangePass] = useState('');
   const [isSelected, setSelection] = useState(false);
@@ -20,7 +20,7 @@ function Login() {
   return (
     <KeyboardAvoidingView style={styles.container}>
       <View style={styles.heading}>
-        <Text style={styles.headingText}>Đăng nhập</Text>
+        <Text style={styles.headingText}>Đăng ký</Text>
       </View>
       <ImageBackground
         style={styles.avata}
@@ -41,10 +41,36 @@ function Login() {
             style={styles.input}
             onChangeText={onChangeUsername}
             value={userNanme}
-            placeholder="Tên đăng nhập"
+            placeholder="Nhập tên tài khoản"
           />
         </View>
-        <View style={[styles.wrapIput, {marginTop: 20}]}>
+        <View style={[styles.wrapIput, {marginTop: 15}]}>
+          <Image
+            style={styles.icon}
+            source={require('../../assets/icon/call.png')}
+          />
+          <TextInput
+            style={styles.input}
+            // secureTextEntry={true}
+            onChangeText={onChangePass}
+            value={pass}
+            placeholder="Nhập số điện thoại"
+          />
+        </View>
+        <View style={[styles.wrapIput, {marginTop: 15}]}>
+          <Image
+            style={styles.icon}
+            source={require('../../assets/icon/user.png')}
+          />
+          <TextInput
+            style={styles.input}
+            // secureTextEntry={true}
+            onChangeText={onChangePass}
+            value={pass}
+            placeholder="Nhập họ và tên"
+          />
+        </View>
+        <View style={[styles.wrapIput, {marginTop: 15}]}>
           <Image
             style={styles.icon}
             source={require('../../assets/icon/lock.png')}
@@ -61,35 +87,27 @@ function Login() {
             source={require('../../assets/icon/eye.png')}
           />
         </View>
-      </View>
-      <View style={styles.boxRemember}>
-        {isSelected ? (
+        <View style={[styles.wrapIput, {marginTop: 15}]}>
           <Image
-            style={{width: 30, height: 30}}
-            source={require('../../assets/icon/unchecked.png')}
+            style={styles.icon}
+            source={require('../../assets/icon/lock.png')}
           />
-        ) : (
+          <TextInput
+            style={styles.input}
+            secureTextEntry={true}
+            onChangeText={onChangePass}
+            value={pass}
+            placeholder="Nhập lại mật khẩu"
+          />
           <Image
-            style={{width: 30, height: 30}}
-            source={require('../../assets/icon/checkbox.png')}
+            style={styles.icon}
+            source={require('../../assets/icon/eye.png')}
           />
-        )}
-        <Text style={{fontSize: 20, color: '#7c4dff', marginLeft: 23}}>
-          Ghi nhớ tài khoản
-        </Text>
+        </View>
       </View>
       <TouchableOpacity style={styles.submit}>
-          <Text style={styles.btnSubmit}>Đăng nhập</Text>
+        <Text style={styles.btnSubmit}>Đăng nhập</Text>
       </TouchableOpacity>
-      {/* <LinearGradient
-        colors={['#4c669f', '#3b5998', '#192f6a']}>
-        <Text >Sign in with Facebook</Text>
-      </LinearGradient> */}
-
-      <View style={styles.footer}>
-        <Text style={{fontSize: 17, color: '#7035a5', marginRight: 10}}>Bạn đã có tài khoản chưa?</Text>
-        <Text style={{fontSize: 20 ,fontWeight:'bold', color: '#7035a5'}}>Đăng ký</Text>
-      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -102,7 +120,8 @@ const styles = StyleSheet.create({
   },
   heading: {
     // flex: 1
-    paddingVertical: 40,
+    paddingTop: 30,
+    paddingBottom: 20,
   },
   headingText: {
     color: '#5535af',
@@ -115,16 +134,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    height: 300,
+    height: 250,
     justifyContent: 'center',
   },
   img_avt: {
-    width: 170,
-    height: 170,
-    borderRadius: 170 / 2,
+    width: 150,
+    height: 150,
+    borderRadius: 150 / 2,
   },
   boxInput: {
-    paddingTop: 30,
+    paddingTop: 15,
     paddingHorizontal: 30,
   },
   wrapIput: {
@@ -148,33 +167,21 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
   },
-  boxRemember: {
-    flexDirection: 'row',
-    justifyContent: 'start',
-    paddingHorizontal: 70,
-    paddingVertical: 20,
-  },
   submit: {
     marginHorizontal: 60,
-    backgroundColor:'#6e37b5',
+    backgroundColor: '#6e37b5',
     flexDirection: 'row',
     justifyContent: 'center',
     padding: 20,
     borderRadius: 50,
+    marginTop: 20,
   },
   btnSubmit: {
     fontSize: 20,
-    fontWeight:'bold',
+    fontWeight: 'bold',
     color: '#fff',
-    textAlign: 'center'
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    // paddingHorizontal: 70, 
-    paddingVertical: 20, 
+    textAlign: 'center',
   },
 });
 
-export default Login;
+export default Rigister;
