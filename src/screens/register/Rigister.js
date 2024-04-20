@@ -9,6 +9,8 @@ import {
   KeyboardAvoidingView,
   Button,
   TouchableOpacity,
+  FlatList,
+  ScrollView,
 } from 'react-native';
 // import LinearGradient from 'react-native-linear-gradient';
 
@@ -18,97 +20,86 @@ function Rigister() {
   const [isSelected, setSelection] = useState(false);
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
-      <View style={styles.heading}>
-        <Text style={styles.headingText}>Đăng ký</Text>
-      </View>
-      <ImageBackground
-        style={styles.avata}
-        resizeMode="cover"
-        source={require('../../assets/img/bg-avt.jpg')}>
-        <Image
-          style={styles.img_avt}
-          source={require('../../assets/img/avt.jpeg')}
-        />
-      </ImageBackground>
-      <View style={styles.boxInput}>
-        <View style={styles.wrapIput}>
-          <Image
-            style={styles.icon}
-            source={require('../../assets/icon/user.png')}
-          />
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeUsername}
-            value={userNanme}
-            placeholder="Nhập tên tài khoản"
-          />
+    <ScrollView>
+      <KeyboardAvoidingView style={styles.container}>
+        <View style={styles.heading}>
+          <Text style={styles.headingText}>Đăng ký</Text>
         </View>
-        <View style={[styles.wrapIput, {marginTop: 15}]}>
+        <ImageBackground
+          style={styles.avata}
+          resizeMode="cover"
+          source={require('../../assets/img/bg-avt.jpg')}>
           <Image
-            style={styles.icon}
-            source={require('../../assets/icon/call.png')}
+            style={styles.img_avt}
+            source={require('../../assets/img/avt.jpeg')}
           />
-          <TextInput
-            style={styles.input}
-            // secureTextEntry={true}
-            onChangeText={onChangePass}
-            value={pass}
-            placeholder="Nhập số điện thoại"
-          />
+        </ImageBackground>
+        <View style={styles.boxInput}>
+          <View style={styles.wrapIput}>
+            <Image
+              style={styles.icon}
+              source={require('../../assets/icon/user.png')}
+            />
+            <TextInput
+              style={styles.input}
+              onChangeText={onChangeUsername}
+              value={userNanme}
+              placeholder="Nhập tên tài khoản"
+            />
+          </View>
+          <View style={[styles.wrapIput, {marginTop: 15}]}>
+            <Image
+              style={styles.icon}
+              source={require('../../assets/icon/call.png')}
+            />
+            <TextInput
+              style={styles.input}
+              // secureTextEntry={true}
+              onChangeText={onChangePass}
+              value={pass}
+              placeholder="Nhập số điện thoại"
+            />
+          </View>
+          <View style={[styles.wrapIput, {marginTop: 15}]}>
+            <Image
+              style={styles.icon}
+              source={require('../../assets/icon/lock.png')}
+            />
+            <TextInput
+              style={styles.input}
+              secureTextEntry={true}
+              onChangeText={onChangePass}
+              value={pass}
+              placeholder="Mật khẩu"
+            />
+            <Image
+              style={styles.icon}
+              source={require('../../assets/icon/eye.png')}
+            />
+          </View>
+          <View style={[styles.wrapIput, {marginTop: 15}]}>
+            <Image
+              style={styles.icon}
+              source={require('../../assets/icon/lock.png')}
+            />
+            <TextInput
+              style={styles.input}
+              secureTextEntry={true}
+              onChangeText={onChangePass}
+              value={pass}
+              placeholder="Nhập lại mật khẩu"
+            />
+            <Image
+              style={styles.icon}
+              source={require('../../assets/icon/eye.png')}
+            />
+          </View>
         </View>
-        <View style={[styles.wrapIput, {marginTop: 15}]}>
-          <Image
-            style={styles.icon}
-            source={require('../../assets/icon/user.png')}
-          />
-          <TextInput
-            style={styles.input}
-            // secureTextEntry={true}
-            onChangeText={onChangePass}
-            value={pass}
-            placeholder="Nhập họ và tên"
-          />
-        </View>
-        <View style={[styles.wrapIput, {marginTop: 15}]}>
-          <Image
-            style={styles.icon}
-            source={require('../../assets/icon/lock.png')}
-          />
-          <TextInput
-            style={styles.input}
-            secureTextEntry={true}
-            onChangeText={onChangePass}
-            value={pass}
-            placeholder="Mật khẩu"
-          />
-          <Image
-            style={styles.icon}
-            source={require('../../assets/icon/eye.png')}
-          />
-        </View>
-        <View style={[styles.wrapIput, {marginTop: 15}]}>
-          <Image
-            style={styles.icon}
-            source={require('../../assets/icon/lock.png')}
-          />
-          <TextInput
-            style={styles.input}
-            secureTextEntry={true}
-            onChangeText={onChangePass}
-            value={pass}
-            placeholder="Nhập lại mật khẩu"
-          />
-          <Image
-            style={styles.icon}
-            source={require('../../assets/icon/eye.png')}
-          />
-        </View>
-      </View>
-      <TouchableOpacity style={styles.submit}>
-        <Text style={styles.btnSubmit}>Đăng nhập</Text>
-      </TouchableOpacity>
-    </KeyboardAvoidingView>
+        <TouchableOpacity style={styles.submit}>
+          <Text style={styles.btnSubmit}>Đăng ký</Text>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
 
@@ -119,9 +110,9 @@ const styles = StyleSheet.create({
     // height: '100%',
   },
   heading: {
-    // flex: 1
+    flex: 1,
     paddingTop: 30,
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
   headingText: {
     color: '#5535af',
@@ -130,7 +121,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   avata: {
-    // flex: 2,
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
@@ -141,6 +132,15 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 150 / 2,
+
+    shadowColor: '#ccc',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.21,
+    shadowRadius: 6.65,
+    // elevation: 9,
   },
   boxInput: {
     paddingTop: 15,
