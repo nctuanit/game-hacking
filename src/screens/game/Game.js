@@ -3,10 +3,10 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import Heading from '../../components/Heading';
 import * as Progress from 'react-native-progress';
 
-function Game() {
+function Game({navigation}) {
   return (
     <View style={styles.game}>
-      <Heading type={false} />
+      <Heading navigation={navigation} type={false} />
       <View style={styles.avataGame}>
         <Image
           style={{flex: 1, width: '100%', borderRadius: 8}}

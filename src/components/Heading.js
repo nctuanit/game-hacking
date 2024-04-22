@@ -1,15 +1,22 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet} from 'react-native';
+import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {setShowMenu} from '../store/tabSlice';
 
-function Heading({type = true}) {
-  // console.log(type);
+function Heading({type = true, navigation}) {
+  const dispath = useDispatch();
+  const handleShowMneu = () => {
+    dispath(setShowMenu(true));
+  };
   return (
     <View style={styles.header}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Image
-          style={{width: 25, height: 25, marginRight: 30}}
-          source={require('../assets/icon/menu.png')}
-        />
+        <TouchableOpacity onPress={handleShowMneu}>
+          <Image
+            style={{width: 25, height: 25, marginRight: 30}}
+            source={require('../assets/icon/menu.png')}
+          />
+        </TouchableOpacity>
         {type ? (
           <View style={styles.content}>
             <Text style={styles.text}>Tổng xu: </Text>
@@ -19,10 +26,12 @@ function Heading({type = true}) {
           ''
         )}
       </View>
-      <Image
-        style={{width: 25, height: 25, marginRight: 0}}
-        source={require('../assets/icon/back.png')}
-      />
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Image
+          style={{width: 25, height: 25, marginRight: 0}}
+          source={require('../assets/icon/back.png')}
+        />
+      </TouchableOpacity>
     </View>
   );
 }

@@ -9,88 +9,97 @@ import {
   KeyboardAvoidingView,
   Button,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 // import LinearGradient from 'react-native-linear-gradient';
 
-function Login() {
+function Login({navigation}) {
   const [userNanme, onChangeUsername] = useState('');
   const [pass, onChangePass] = useState('');
   const [isSelected, setSelection] = useState(false);
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
-      <View style={styles.heading}>
-        <Text style={styles.headingText}>Đăng nhập</Text>
-      </View>
-      <ImageBackground
-        style={styles.avata}
-        resizeMode="cover"
-        source={require('../../assets/img/bg-avt.jpg')}>
-        <Image
-          style={styles.img_avt}
-          source={require('../../assets/img/avt.jpeg')}
-        />
-      </ImageBackground>
-      <View style={styles.boxInput}>
-        <View style={styles.wrapIput}>
-          <Image
-            style={styles.icon}
-            source={require('../../assets/icon/user.png')}
-          />
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeUsername}
-            value={userNanme}
-            placeholder="Tên đăng nhập"
-          />
+    <ScrollView>
+      <KeyboardAvoidingView style={styles.container}>
+        <View style={styles.heading}>
+          <Text style={styles.headingText}>Đăng nhập</Text>
         </View>
-        <View style={[styles.wrapIput, {marginTop: 20}]}>
+        <ImageBackground
+          style={styles.avata}
+          resizeMode="cover"
+          source={require('../../assets/img/bg-avt.jpg')}>
           <Image
-            style={styles.icon}
-            source={require('../../assets/icon/lock.png')}
+            style={styles.img_avt}
+            source={require('../../assets/img/avt.jpeg')}
           />
-          <TextInput
-            style={styles.input}
-            secureTextEntry={true}
-            onChangeText={onChangePass}
-            value={pass}
-            placeholder="Mật khẩu"
-          />
-          <Image
-            style={styles.icon}
-            source={require('../../assets/icon/eye.png')}
-          />
+        </ImageBackground>
+        <View style={styles.boxInput}>
+          <View style={styles.wrapIput}>
+            <Image
+              style={styles.icon}
+              source={require('../../assets/icon/user.png')}
+            />
+            <TextInput
+              style={styles.input}
+              onChangeText={onChangeUsername}
+              value={userNanme}
+              placeholder="Tên đăng nhập"
+            />
+          </View>
+          <View style={[styles.wrapIput, {marginTop: 20}]}>
+            <Image
+              style={styles.icon}
+              source={require('../../assets/icon/lock.png')}
+            />
+            <TextInput
+              style={styles.input}
+              secureTextEntry={true}
+              onChangeText={onChangePass}
+              value={pass}
+              placeholder="Mật khẩu"
+            />
+            <Image
+              style={styles.icon}
+              source={require('../../assets/icon/eye.png')}
+            />
+          </View>
         </View>
-      </View>
-      <View style={styles.boxRemember}>
-        {isSelected ? (
-          <Image
-            style={{width: 30, height: 30}}
-            source={require('../../assets/icon/unchecked.png')}
-          />
-        ) : (
-          <Image
-            style={{width: 30, height: 30}}
-            source={require('../../assets/icon/checkbox.png')}
-          />
-        )}
-        <Text style={{fontSize: 20, color: '#7c4dff', marginLeft: 23}}>
-          Ghi nhớ tài khoản
-        </Text>
-      </View>
-      <TouchableOpacity style={styles.submit}>
+        <View style={styles.boxRemember}>
+          {isSelected ? (
+            <Image
+              style={{width: 30, height: 30}}
+              source={require('../../assets/icon/unchecked.png')}
+            />
+          ) : (
+            <Image
+              style={{width: 30, height: 30}}
+              source={require('../../assets/icon/checkbox.png')}
+            />
+          )}
+          <Text style={{fontSize: 20, color: '#7c4dff', marginLeft: 23}}>
+            Ghi nhớ tài khoản
+          </Text>
+        </View>
+        <TouchableOpacity style={styles.submit} onPress={() => navigation.navigate('ListSection')}>
           <Text style={styles.btnSubmit}>Đăng nhập</Text>
-      </TouchableOpacity>
-      {/* <LinearGradient
+        </TouchableOpacity>
+        {/* <LinearGradient
         colors={['#4c669f', '#3b5998', '#192f6a']}>
         <Text >Sign in with Facebook</Text>
       </LinearGradient> */}
 
-      <View style={styles.footer}>
-        <Text style={{fontSize: 17, color: '#7035a5', marginRight: 10}}>Bạn đã có tài khoản chưa?</Text>
-        <Text style={{fontSize: 20 ,fontWeight:'bold', color: '#7035a5'}}>Đăng ký</Text>
-      </View>
-    </KeyboardAvoidingView>
+        <View style={styles.footer}>
+          <Text style={{fontSize: 17, color: '#7035a5', marginRight: 10}}>
+            Bạn đã có tài khoản chưa?
+          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Rigister')}>
+            <Text style={{fontSize: 20, fontWeight: 'bold', color: '#7035a5'}}>
+              Đăng ký
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
 
@@ -156,7 +165,7 @@ const styles = StyleSheet.create({
   },
   submit: {
     marginHorizontal: 60,
-    backgroundColor:'#6e37b5',
+    backgroundColor: '#6e37b5',
     flexDirection: 'row',
     justifyContent: 'center',
     padding: 20,
@@ -164,16 +173,16 @@ const styles = StyleSheet.create({
   },
   btnSubmit: {
     fontSize: 20,
-    fontWeight:'bold',
+    fontWeight: 'bold',
     color: '#fff',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    // paddingHorizontal: 70, 
-    paddingVertical: 20, 
+    // paddingHorizontal: 70,
+    paddingVertical: 20,
   },
 });
 

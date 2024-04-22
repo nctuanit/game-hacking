@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 // import LinearGradient from 'react-native-linear-gradient';
 
-function Rigister() {
+function Rigister({navigation}) {
   const [userNanme, onChangeUsername] = useState('');
   const [pass, onChangePass] = useState('');
   const [isSelected, setSelection] = useState(false);
@@ -95,7 +95,9 @@ function Rigister() {
             />
           </View>
         </View>
-        <TouchableOpacity style={styles.submit}>
+        <TouchableOpacity
+          style={styles.submit}
+          onPress={() => navigation.navigate('ListSection')}>
           <Text style={styles.btnSubmit}>Đăng ký</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
