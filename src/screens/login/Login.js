@@ -11,12 +11,28 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-// import LinearGradient from 'react-native-linear-gradient';
+import {useForm, Controller} from 'react-hook-form';
 
 function Login({navigation}) {
   const [userNanme, onChangeUsername] = useState('');
   const [pass, onChangePass] = useState('');
   const [isSelected, setSelection] = useState(false);
+
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm();
+
+  const isPhoneNumber = value => {
+    const phoneNumberPattern = /^\d{10}$/;
+    return phoneNumberPattern.test(value);
+  };
+
+  const onSubmit = data => {
+    console.log('dữ liệu đăng ký user:', data);
+    // navigation.navigate('ListSection')
+  };
 
   return (
     <ScrollView>
@@ -39,24 +55,41 @@ function Login({navigation}) {
               style={styles.icon}
               source={require('../../assets/icon/user.png')}
             />
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeUsername}
-              value={userNanme}
-              placeholder="Tên đăng nhập"
+            <Controller
+              control={control}
+              render={({field: {onChange, onBlur, value}}) => (
+                <TextInput
+                  style={styles.input}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="Tên đăng nhập"
+                />
+              )}
+              name="userNanme"
+              rules={{required: true}}
             />
           </View>
+          {errors.userNanme?.type == 'required' && (
+            <Text>Vui lòng không bỏ trống</Text>
+          )}
           <View style={[styles.wrapIput, {marginTop: 20}]}>
             <Image
               style={styles.icon}
               source={require('../../assets/icon/lock.png')}
             />
-            <TextInput
-              style={styles.input}
-              secureTextEntry={true}
-              onChangeText={onChangePass}
-              value={pass}
-              placeholder="Mật khẩu"
+            <Controller
+              control={control}
+              render={({field: {onChange, onBlur, value}}) => (
+                <TextInput
+                  style={styles.input}
+                  secureTextEntry={true}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="Mật khẩu"
+                />
+              )}
+              name="password"
+              rules={{required: true}}
             />
             <Image
               style={styles.icon}
@@ -80,7 +113,9 @@ function Login({navigation}) {
             Ghi nhớ tài khoản
           </Text>
         </View>
-        <TouchableOpacity style={styles.submit} onPress={() => navigation.navigate('ListSection')}>
+        <TouchableOpacity
+          style={styles.submit}
+          onPress={handleSubmit(onSubmit)}>
           <Text style={styles.btnSubmit}>Đăng nhập</Text>
         </TouchableOpacity>
         {/* <LinearGradient

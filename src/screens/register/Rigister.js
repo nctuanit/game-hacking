@@ -12,12 +12,27 @@ import {
   FlatList,
   ScrollView,
 } from 'react-native';
-// import LinearGradient from 'react-native-linear-gradient';
+import {useForm, Controller} from 'react-hook-form';
 
 function Rigister({navigation}) {
   const [userNanme, onChangeUsername] = useState('');
   const [pass, onChangePass] = useState('');
   const [isSelected, setSelection] = useState(false);
+
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm();
+
+  const isPhoneNumber = value => {
+    const phoneNumberPattern = /^\d{10}$/;
+    return phoneNumberPattern.test(value);
+  };
+
+  const onSubmit = data => {
+    console.log('dữ liệu đăng ký user:', data);
+  };
 
   return (
     <ScrollView>
@@ -40,43 +55,75 @@ function Rigister({navigation}) {
               style={styles.icon}
               source={require('../../assets/icon/user.png')}
             />
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeUsername}
-              value={userNanme}
-              placeholder="Nhập tên tài khoản"
+            <Controller
+              control={control}
+              render={({field: {onChange, onBlur, value}}) => (
+                <TextInput
+                  style={styles.input}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="Nhập tên tài khoản"
+                />
+              )}
+              name="userNanme"
+              rules={{required: true}}
             />
           </View>
+          {errors.userNanme?.type == 'required' && (
+            <Text>Vui lòng không bỏ trống</Text>
+          )}
           <View style={[styles.wrapIput, {marginTop: 15}]}>
             <Image
               style={styles.icon}
               source={require('../../assets/icon/call.png')}
             />
-            <TextInput
-              style={styles.input}
-              // secureTextEntry={true}
-              onChangeText={onChangePass}
-              value={pass}
-              placeholder="Nhập số điện thoại"
+            <Controller
+              control={control}
+              render={({field: {onChange, onBlur, value}}) => (
+                <TextInput
+                  style={styles.input}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="Nhập số điện thoại"
+                />
+              )}
+              name="phone"
+              rules={{required: true, validate: isPhoneNumber}}
             />
           </View>
+          {errors.phone?.type == 'required' && (
+            <Text>Vui lòng không bỏ trống</Text>
+          )}
+          {errors.phone?.type == 'validate' && (
+            <Text>Vui lòng nhập đúng số điện thoại</Text>
+          )}
           <View style={[styles.wrapIput, {marginTop: 15}]}>
             <Image
               style={styles.icon}
               source={require('../../assets/icon/lock.png')}
             />
-            <TextInput
-              style={styles.input}
-              secureTextEntry={true}
-              onChangeText={onChangePass}
-              value={pass}
-              placeholder="Mật khẩu"
+            <Controller
+              control={control}
+              render={({field: {onChange, onBlur, value}}) => (
+                <TextInput
+                  style={styles.input}
+                  secureTextEntry={true}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="Mật khẩu"
+                />
+              )}
+              name="password"
+              rules={{required: true, validate: isPhoneNumber}}
             />
             <Image
               style={styles.icon}
               source={require('../../assets/icon/eye.png')}
             />
           </View>
+          {errors.phone?.type == 'required' && (
+            <Text>Vui lòng không bỏ trống</Text>
+          )}
           <View style={[styles.wrapIput, {marginTop: 15}]}>
             <Image
               style={styles.icon}
@@ -97,7 +144,7 @@ function Rigister({navigation}) {
         </View>
         <TouchableOpacity
           style={styles.submit}
-          onPress={() => navigation.navigate('ListSection')}>
+          onPress={handleSubmit(onSubmit)}>
           <Text style={styles.btnSubmit}>Đăng ký</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
