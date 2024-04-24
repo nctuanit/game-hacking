@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -11,98 +11,45 @@ import {
 } from 'react-native';
 import Heading from '../../components/Heading';
 import {useDispatch, useSelector} from 'react-redux';
-import {selectorGame} from '../../store/gameSlice';
+import {selectorGame, setRoomGameSelector} from '../../store/gameSlice';
+import {getListGameById} from '../../services/gameServices';
 
 function ListGame({navigation}) {
+  const [listGame, setListGame] = useState([]);
+  const dispath = useDispatch();
   const gameSelector = useSelector(selectorGame);
-  console.log(gameSelector);
-  const DATA = [
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      title: 'PG Điện tử',
-      img: require('../../assets/img/imggame/1.png'),
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      title: 'PG Điện tử',
-      img: require('../../assets/img/imggame/2.png'),
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: 'PG Điện tử',
-      img: require('../../assets/img/imggame/3.png'),
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d74',
-      title: 'PG Điện tử',
-      img: require('../../assets/img/imggame/4.png'),
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d75',
-      title: 'PG Điện tử',
-      img: require('../../assets/img/imggame/5.png'),
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d76',
-      title: 'PG Điện tử',
-      img: require('../../assets/img/imggame/6.png'),
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d77',
-      title: 'PG Điện tử',
-      img: require('../../assets/img/imggame/7.png'),
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d78',
-      title: 'PG Điện tử',
-      img: require('../../assets/img/imggame/8.png'),
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d79',
-      title: 'PG Điện tử',
-      img: require('../../assets/img/imggame/9.png'),
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d7d',
-      title: 'PG Điện tử',
-      img: require('../../assets/img/imggame/10.png'),
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d7f',
-      title: 'PG Điện tử',
-      img: require('../../assets/img/imggame/11.png'),
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d7s',
-      title: 'PG Điện tử',
-      img: require('../../assets/img/imggame/12.png'),
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d7b',
-      title: 'PG Điện tử',
-      img: require('../../assets/img/imggame/13.png'),
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d7b',
-      title: 'PG Điện tử',
-      img: require('../../assets/img/imggame/14.png'),
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d7b',
-      title: 'PG Điện tử',
-      img: require('../../assets/img/imggame/15.png'),
-    },
-  ];
-  const Item = ({img}) => (
-    <TouchableOpacity
-      style={styles.item}
-      onPress={() => navigation.navigate('Game')}>
+  // console.log('id của phòng game 🚨🚨🚨:', gameSelector._id);
+  useEffect(() => {
+    getListGameById(gameSelector._id)
+      .then(res => {
+        // console.log('danh sach phong game 🚨🚨🚨:', res.data);
+        setListGame(res.data);
+      })
+      .catch(err => {
+        console.log('loi danh sach phong game:', err);
+      });
+  }, []);
+
+  const handleSelecGame = item => {
+    dispath(setRoomGameSelector(item));
+    navigation.navigate('Game');
+  };
+
+  const Item = ({item}) => (
+    <TouchableOpacity style={styles.item} onPress={() => handleSelecGame(item)}>
       <View style={styles.itemContent}>
         <Image
-          style={{width: '100%', height: 100, borderRadius: 8}}
-          source={img}
+          style={{
+            width: '100%',
+            height: 100,
+            borderRadius: 8,
+            resizeMode: 'stretch',
+          }}
+          source={{
+            url: `https://api.hackinggame.tuannc.com/public/${item.image}`,
+          }}
         />
-        {/* <Text style={styles.title}>{title}</Text> */}
+        <Text style={styles.title}>{item.name}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -110,9 +57,9 @@ function ListGame({navigation}) {
     <SafeAreaView style={styles.container}>
       <Heading navigation={navigation} />
       <FlatList
-        data={DATA}
-        renderItem={({item}) => <Item img={item.img} />}
-        keyExtractor={item => item.id}
+        data={listGame}
+        renderItem={({item}) => <Item item={item} />}
+        keyExtractor={item => item._id}
         numColumns={2}
         style={styles.wrapperList}
       />

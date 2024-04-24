@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import Heading from '../../components/Heading';
 import * as Progress from 'react-native-progress';
+import {useDispatch, useSelector} from 'react-redux';
 
 function Game({navigation}) {
   return (

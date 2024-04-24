@@ -10,13 +10,19 @@ import {
   Button,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
+import {infoAccount, login} from '../../services/authServices';
+import {setToken} from '../../utils/AsyncStorage';
+import {setUserInfo} from '../../store/userSlice';
+import {useDispatch} from 'react-redux';
 
 function Login({navigation}) {
   const [userNanme, onChangeUsername] = useState('');
   const [pass, onChangePass] = useState('');
   const [isSelected, setSelection] = useState(false);
+  const dispath = useDispatch();
 
   const {
     control,
@@ -29,9 +35,38 @@ function Login({navigation}) {
     return phoneNumberPattern.test(value);
   };
 
+  const AlertMess = content =>
+    Alert.alert('Thông báo', content, [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ]);
+
+  const handlegetUserInfo = () => {
+    infoAccount()
+      .then(res => {
+        dispath(setUserInfo(res.data));
+      })
+      .catch(err => {
+        // console.log('thong bao loi khong lay duoc thong tin user:', err);
+      });
+  };
+
   const onSubmit = data => {
     console.log('dữ liệu đăng ký user:', data);
-    // navigation.navigate('ListSection')
+    login(data)
+      .then(res => {
+        // console.log('thông tin sau khi đăng nhập 🚗🚗🚗🚗🚗:', res.data.token);
+        setToken(res.data.token);
+        handlegetUserInfo();
+      })
+      .catch(err => {
+        // console.log('thông báo lỗi khi không đăng nhập được:', err);
+        AlertMess('Đăng nhập không thành công');
+      });
   };
 
   return (
@@ -65,7 +100,7 @@ function Login({navigation}) {
                   placeholder="Tên đăng nhập"
                 />
               )}
-              name="userNanme"
+              name="username"
               rules={{required: true}}
             />
           </View>
@@ -96,6 +131,9 @@ function Login({navigation}) {
               source={require('../../assets/icon/eye.png')}
             />
           </View>
+          {errors.password?.type == 'required' && (
+            <Text>Vui lòng không bỏ trống</Text>
+          )}
         </View>
         <View style={styles.boxRemember}>
           {isSelected ? (

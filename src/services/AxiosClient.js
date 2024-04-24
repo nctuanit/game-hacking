@@ -1,8 +1,8 @@
 import axios from 'axios';
 import {parse, stringify} from 'qs';
-import { getToken } from '../utils/AsyncStorage';
+import {getToken} from '../utils/AsyncStorage';
 
-const API_ENDPOINT = 'https://api.hackinggame.tuannc.com/'
+const API_ENDPOINT = 'https://api.hackinggame.tuannc.com/';
 
 const AxiosClient = axios.create({
   baseURL: API_ENDPOINT,
@@ -17,11 +17,10 @@ const AxiosClient = axios.create({
 AxiosClient.interceptors.request.use(
   async config => {
     const newConfig = config;
-    if (getToken() ?? getSessionToken()) {
-      newConfig.headers.Authorization = `Bearer ${
-        getToken() ?? getSessionToken()
-      }`;
-    }
+    try {
+      const token = await getToken();
+      newConfig.headers.Authorization = `Bearer ${token}`;
+    } catch {}
     return newConfig;
   },
   error => {

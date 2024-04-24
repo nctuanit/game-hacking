@@ -11,13 +11,16 @@ import {
   TouchableOpacity,
   FlatList,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
+import {register} from '../../services/authServices';
 
 function Rigister({navigation}) {
   const [userNanme, onChangeUsername] = useState('');
   const [pass, onChangePass] = useState('');
   const [isSelected, setSelection] = useState(false);
+  const [isShowErrRePass, setIsShowErrRePass] = useState(false);
 
   const {
     control,
@@ -30,8 +33,33 @@ function Rigister({navigation}) {
     return phoneNumberPattern.test(value);
   };
 
+  const AlertMess = content =>
+    Alert.alert('Thông báo', content, [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ]);
+
   const onSubmit = data => {
-    console.log('dữ liệu đăng ký user:', data);
+    if (pass === data.password) {
+      setIsShowErrRePass(false);
+      // console.log('thông tin đăng ký:', data);
+      register(data)
+        .then(res => {
+          // console.log('thông tin sau khi đăng ký:', res);
+          AlertMess('Đăng ký thành công');
+          navigation.navigate('Login');
+        })
+        .catch(err => {
+          // console.log('thông báo lỗi không đăng ký được:', err);
+          AlertMess('Đăng ký không thành công');
+        });
+    } else {
+      setIsShowErrRePass(true);
+    }
   };
 
   return (
@@ -65,7 +93,7 @@ function Rigister({navigation}) {
                   placeholder="Nhập tên tài khoản"
                 />
               )}
-              name="userNanme"
+              name="username"
               rules={{required: true}}
             />
           </View>
@@ -114,14 +142,14 @@ function Rigister({navigation}) {
                 />
               )}
               name="password"
-              rules={{required: true, validate: isPhoneNumber}}
+              rules={{required: true}}
             />
             <Image
               style={styles.icon}
               source={require('../../assets/icon/eye.png')}
             />
           </View>
-          {errors.phone?.type == 'required' && (
+          {errors.password?.type == 'required' && (
             <Text>Vui lòng không bỏ trống</Text>
           )}
           <View style={[styles.wrapIput, {marginTop: 15}]}>
@@ -141,6 +169,7 @@ function Rigister({navigation}) {
               source={require('../../assets/icon/eye.png')}
             />
           </View>
+          {isShowErrRePass && <Text>Nhập lại mật khẩu không đúng</Text>}
         </View>
         <TouchableOpacity
           style={styles.submit}

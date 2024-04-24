@@ -9,3 +9,7 @@ export const register = data => {
 export const login = data => {
   return AxiosClient.post(API_ENDPOINT + '/login', data);
 };
+
+export const infoAccount = () => {
+  return AxiosClient.get(API_ENDPOINT + '/me');
+};

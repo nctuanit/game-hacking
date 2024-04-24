@@ -2,11 +2,20 @@ import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {setShowMenu} from '../store/tabSlice';
+import {removeUserInfo, userInfoSelector} from '../store/userSlice';
+import {removeToken} from '../utils/AsyncStorage';
 
 function Menu() {
   const dispath = useDispatch();
+  const userInfo = useSelector(userInfoSelector);
+
   const handleHideMenu = () => {
     dispath(setShowMenu(false));
+  };
+  const handleLogout = () => {
+    removeToken();
+    handleHideMenu()
+    dispath(removeUserInfo());
   };
   return (
     <View style={styles.menu}>
@@ -14,7 +23,7 @@ function Menu() {
         <View style={styles.layoutTop}>
           <Text style={{fontSize: 23, color: '#000'}}>Xin chào,</Text>
           <Text style={{fontSize: 23, color: '#000', fontWeight: 'bold'}}>
-            Tuan
+            {userInfo?.username}
           </Text>
         </View>
         <View style={styles.layoutBody}>
@@ -39,7 +48,7 @@ function Menu() {
             />
             <Text style={styles.itemtabText}>Telegram</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.itemTab}>
+          <TouchableOpacity style={styles.itemTab} onPress={handleLogout}>
             <Image
               style={styles.icon}
               source={require('../assets/icon/power.png')}
