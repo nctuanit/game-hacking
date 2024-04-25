@@ -12,6 +12,7 @@ import {
   FlatList,
   ScrollView,
   Alert,
+  Pressable,
 } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {register} from '../../services/authServices';
@@ -21,6 +22,7 @@ function Rigister({navigation}) {
   const [pass, onChangePass] = useState('');
   const [isSelected, setSelection] = useState(false);
   const [isShowErrRePass, setIsShowErrRePass] = useState(false);
+  const [isShowPass, setIsShowPass] = useState(true);
 
   const {
     control,
@@ -60,6 +62,10 @@ function Rigister({navigation}) {
     } else {
       setIsShowErrRePass(true);
     }
+  };
+
+  const handleSetIsShowPass = () => {
+    setIsShowPass(!isShowPass);
   };
 
   return (
@@ -135,7 +141,7 @@ function Rigister({navigation}) {
               render={({field: {onChange, onBlur, value}}) => (
                 <TextInput
                   style={styles.input}
-                  secureTextEntry={true}
+                  secureTextEntry={isShowPass}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Mật khẩu"
@@ -144,10 +150,19 @@ function Rigister({navigation}) {
               name="password"
               rules={{required: true}}
             />
-            <Image
-              style={styles.icon}
-              source={require('../../assets/icon/eye.png')}
-            />
+            <Pressable onPress={handleSetIsShowPass}>
+              {isShowPass ? (
+                <Image
+                  style={styles.icon}
+                  source={require('../../assets/icon/watch.png')}
+                />
+              ) : (
+                <Image
+                  style={styles.icon}
+                  source={require('../../assets/icon/eye.png')}
+                />
+              )}
+            </Pressable>
           </View>
           {errors.password?.type == 'required' && (
             <Text>Vui lòng không bỏ trống</Text>
@@ -159,15 +174,24 @@ function Rigister({navigation}) {
             />
             <TextInput
               style={styles.input}
-              secureTextEntry={true}
+              secureTextEntry={isShowPass}
               onChangeText={onChangePass}
               value={pass}
               placeholder="Nhập lại mật khẩu"
             />
-            <Image
-              style={styles.icon}
-              source={require('../../assets/icon/eye.png')}
-            />
+            <Pressable onPress={handleSetIsShowPass}>
+              {isShowPass ? (
+                <Image
+                  style={styles.icon}
+                  source={require('../../assets/icon/watch.png')}
+                />
+              ) : (
+                <Image
+                  style={styles.icon}
+                  source={require('../../assets/icon/eye.png')}
+                />
+              )}
+            </Pressable>
           </View>
           {isShowErrRePass && <Text>Nhập lại mật khẩu không đúng</Text>}
         </View>

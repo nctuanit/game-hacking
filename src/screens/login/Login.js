@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Pressable,
 } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {infoAccount, login} from '../../services/authServices';
@@ -22,6 +23,7 @@ function Login({navigation}) {
   const [userNanme, onChangeUsername] = useState('');
   const [pass, onChangePass] = useState('');
   const [isSelected, setSelection] = useState(false);
+  const [isShowPass, setIsShowPass] = useState(true);
   const dispath = useDispatch();
 
   const {
@@ -67,6 +69,14 @@ function Login({navigation}) {
         // console.log('thông báo lỗi khi không đăng nhập được:', err);
         AlertMess('Đăng nhập không thành công');
       });
+  };
+
+  const handleSelecRememoryAccount = () => {
+    setSelection(!isSelected);
+  };
+
+  const handleSetIsShowPass = () => {
+    setIsShowPass(!isShowPass);
   };
 
   return (
@@ -117,7 +127,7 @@ function Login({navigation}) {
               render={({field: {onChange, onBlur, value}}) => (
                 <TextInput
                   style={styles.input}
-                  secureTextEntry={true}
+                  secureTextEntry={isShowPass}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Mật khẩu"
@@ -126,16 +136,27 @@ function Login({navigation}) {
               name="password"
               rules={{required: true}}
             />
-            <Image
-              style={styles.icon}
-              source={require('../../assets/icon/eye.png')}
-            />
+            <Pressable onPress={handleSetIsShowPass}>
+              {isShowPass ? (
+                <Image
+                  style={styles.icon}
+                  source={require('../../assets/icon/watch.png')}
+                />
+              ) : (
+                <Image
+                  style={styles.icon}
+                  source={require('../../assets/icon/eye.png')}
+                />
+              )}
+            </Pressable>
           </View>
           {errors.password?.type == 'required' && (
             <Text>Vui lòng không bỏ trống</Text>
           )}
         </View>
-        <View style={styles.boxRemember}>
+        <Pressable
+          style={styles.boxRemember}
+          onPress={handleSelecRememoryAccount}>
           {isSelected ? (
             <Image
               style={{width: 30, height: 30}}
@@ -150,7 +171,7 @@ function Login({navigation}) {
           <Text style={{fontSize: 20, color: '#7c4dff', marginLeft: 23}}>
             Ghi nhớ tài khoản
           </Text>
-        </View>
+        </Pressable>
         <TouchableOpacity
           style={styles.submit}
           onPress={handleSubmit(onSubmit)}>

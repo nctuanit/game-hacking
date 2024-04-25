@@ -6,21 +6,51 @@ import {
   Image,
   TouchableOpacity,
   ImageBackground,
+  Alert,
 } from 'react-native';
 import Heading from '../../components/Heading';
 import * as Progress from 'react-native-progress';
 import {useDispatch, useSelector} from 'react-redux';
 import {selectorRoomGame} from '../../store/gameSlice';
 import {gameDetail} from '../../services/gameServices';
-import { ismenu } from '../../store/tabSlice';
+import {ismenu} from '../../store/tabSlice';
 import Menu from '../../components/Menu';
+import {
+  byTimeTransaction,
+  getCurrenTransaction,
+} from '../../services/transactionServices';
+import {format} from 'date-fns';
+import moment from 'moment';
 
 function Game({navigation}) {
   const [gameinfo, setGameInfo] = useState({});
+  const [currentGame, setCurrentGame] = useState({});
   const isShowMenu = useSelector(ismenu);
   const roomsGameInfo = useSelector(selectorRoomGame);
+  const [isDisableBtn, setIsDisableBtn] = useState(false);
   // console.log('thong tin phong game 😇😇😇😇:', roomsGameInfo);
-  useEffect(() => {
+
+  const handleConvertTime = date => {
+    if (date) {
+      var date = new Date(date);
+      var formattedDate = format(date, 'H:mm');
+      return formattedDate;
+    } else {
+      return '';
+    }
+  };
+
+  const AlertMess = content =>
+    Alert.alert('Thông báo', content, [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ]);
+
+  const handleGetGameDetail = () => {
     gameDetail(roomsGameInfo._id)
       .then(res => {
         setGameInfo(res.data);
@@ -28,7 +58,55 @@ function Game({navigation}) {
       .catch(err => {
         console.log(err);
       });
+  };
+
+  const handleGetCurrentGame = () => {
+    getCurrenTransaction(roomsGameInfo._id)
+      .then(res => {
+        // console.log(res.data);
+        setCurrentGame(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    handleGetGameDetail();
+    handleGetCurrentGame();
   }, [roomsGameInfo]);
+
+  const handleByTimeGame = () => {
+    // console.log('by');
+    byTimeTransaction(roomsGameInfo._id)
+      .then(res => {
+        // console.log(res.data);
+        AlertMess('Nhận khung giờ thành công');
+        handleGetCurrentGame();
+      })
+      .catch(err => {
+        console.log(err);
+        AlertMess('Tài khoản không đủ tiền');
+      });
+  };
+
+  useEffect(() => {
+    if (currentGame.to) {
+      const to = currentGame.to;
+      const currentTime = moment();
+
+      const toMoment = moment(to);
+
+      if (toMoment.isBefore(currentTime)) {
+        setIsDisableBtn(false);
+      } else if (toMoment.isSame(currentTime)) {
+        setIsDisableBtn(true);
+      } else {
+        setIsDisableBtn(true);
+      }
+    }
+  }, [currentGame]);
+
   return (
     <ImageBackground
       source={require('../../assets/img/background.jpg')}
@@ -62,7 +140,7 @@ function Game({navigation}) {
                 fontWeight: 'bold',
                 color: '#fff',
               }}>
-              50%
+              {currentGame?.percent ? `${currentGame.percent}%` : ''}
             </Text>
           </ImageBackground>
           <View style={{width: 15}}></View>
@@ -70,16 +148,29 @@ function Game({navigation}) {
             source={require('../../assets/img/KHUNG_GIO.png')}
             resizeMode="stretch"
             style={styles.boxContainer}>
-            <Text style={styles.TimeText}>12:00</Text>
+            <Text style={styles.TimeText}>
+              {handleConvertTime(currentGame?.from)}
+            </Text>
             <Text style={{marginHorizontal: 5, fontSize: 18, color: '#fff'}}>
               -
             </Text>
-            <Text style={styles.TimeText}>12:08</Text>
+            <Text style={styles.TimeText}>
+              {handleConvertTime(currentGame?.to)}
+            </Text>
           </ImageBackground>
         </View>
         <View style={styles.Boxsubmit}>
-          <TouchableOpacity style={styles.btnSubmit}>
-            <Text style={{color: '#fff', fontSize: 18, fontWeight: 'bold'}}>
+          <TouchableOpacity
+            style={styles.btnSubmit}
+            onPress={handleByTimeGame}
+            disabled={isDisableBtn}>
+            <Text
+              style={{
+                color: '#fff',
+                fontSize: 18,
+                fontWeight: 'bold',
+                opacity: isDisableBtn ? 0.5 : 1,
+              }}>
               Nhận khung giờ
             </Text>
           </TouchableOpacity>
