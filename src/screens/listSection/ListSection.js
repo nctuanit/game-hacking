@@ -59,7 +59,7 @@ function ListSection({navigation}) {
   };
   return (
     <SafeAreaView style={styles.container}>
-      <Heading navigation={navigation} />
+      <Heading navigation={navigation} back={false} />
       <FlatList
         data={listCategory}
         renderItem={({item}) => <Item item={item} />}
@@ -67,7 +67,7 @@ function ListSection({navigation}) {
         numColumns={2}
         style={styles.wrapperList}
       />
-      {isShowMenu ? <Menu /> : ''}
+      {isShowMenu ? <Menu navigation={navigation} /> : ''}
     </SafeAreaView>
   );
 }

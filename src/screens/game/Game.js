@@ -1,52 +1,81 @@
-import React from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ImageBackground,
+} from 'react-native';
 import Heading from '../../components/Heading';
 import * as Progress from 'react-native-progress';
 import {useDispatch, useSelector} from 'react-redux';
+import {selectorRoomGame} from '../../store/gameSlice';
+import {gameDetail} from '../../services/gameServices';
+import { ismenu } from '../../store/tabSlice';
+import Menu from '../../components/Menu';
 
 function Game({navigation}) {
+  const [gameinfo, setGameInfo] = useState({});
+  const isShowMenu = useSelector(ismenu);
+  const roomsGameInfo = useSelector(selectorRoomGame);
+  // console.log('thong tin phong game 😇😇😇😇:', roomsGameInfo);
+  useEffect(() => {
+    gameDetail(roomsGameInfo._id)
+      .then(res => {
+        setGameInfo(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, [roomsGameInfo]);
   return (
-    <View style={styles.game}>
-      <Heading navigation={navigation} type={false} />
+    <ImageBackground
+      source={require('../../assets/img/background.jpg')}
+      resizeMode="cover"
+      style={styles.game}>
+      <Heading navigation={navigation} type={false} bg={'#fff'} />
       <View style={styles.avataGame}>
         <Image
-          style={{flex: 1, width: '100%', borderRadius: 8}}
-          source={require('../../assets/img/poster.jpeg')}
+          style={{height: 230, width: 230, borderRadius: 8}}
+          resizeMode="stretch"
+          source={{
+            url: `https://api.hackinggame.tuannc.com/public/${gameinfo?.image}`,
+          }}
         />
       </View>
       <View style={styles.WrapperControl}>
-        <View style={styles.totalCoin}>
+        {/* <View style={styles.totalCoin}>
           <Text style={{fontSize: 18, fontWeight: 'bold'}}>TỔNG XU:</Text>
           <Text style={{fontSize: 18, fontWeight: 'bold', marginLeft: 5}}>
             100
           </Text>
-        </View>
+        </View> */}
         <View style={styles.boxControl}>
-          <View style={styles.boxContainer}>
-            <Text style={styles.TimeText}>12:00</Text>
-            <Text style={{marginHorizontal: 5, fontSize: 18}}>-</Text>
-            <Text style={styles.TimeText}>12:08</Text>
-          </View>
-          <View style={{width: 15}}></View>
-          <View style={{position: 'relative'}}>
-            <Progress.Bar
-              progress={0.5}
-              animated={true}
-              height={50}
-              useNativeDriver={true}
-              color={'#4e7bbf'}
-            />
+          <ImageBackground
+            source={require('../../assets/img/KHUNG_PHAN_TRAM.png')}
+            resizeMode="stretch"
+            style={styles.BoxProgress}>
             <Text
               style={{
-                position: 'absolute',
                 fontSize: 17,
                 fontWeight: 'bold',
-                top: 15,
-                right: 15,
+                color: '#fff',
               }}>
               50%
             </Text>
-          </View>
+          </ImageBackground>
+          <View style={{width: 15}}></View>
+          <ImageBackground
+            source={require('../../assets/img/KHUNG_GIO.png')}
+            resizeMode="stretch"
+            style={styles.boxContainer}>
+            <Text style={styles.TimeText}>12:00</Text>
+            <Text style={{marginHorizontal: 5, fontSize: 18, color: '#fff'}}>
+              -
+            </Text>
+            <Text style={styles.TimeText}>12:08</Text>
+          </ImageBackground>
         </View>
         <View style={styles.Boxsubmit}>
           <TouchableOpacity style={styles.btnSubmit}>
@@ -64,7 +93,8 @@ function Game({navigation}) {
           </Text>
         </View>
       </View>
-    </View>
+      {isShowMenu ? <Menu navigation={navigation} /> : ''}
+    </ImageBackground>
   );
 }
 
@@ -74,8 +104,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   avataGame: {
-    flex: 1,
+    flex: 1.5,
     paddingHorizontal: 20,
+    paddingTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   WrapperControl: {
     flexDirection: 'column',
@@ -96,22 +130,30 @@ const styles = StyleSheet.create({
   boxControl: {
     // flex: 1,
     marginHorizontal: 20,
-    marginVertical: 30,
+    marginVertical: 20,
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
   boxContainer: {
     flex: 1,
-    borderWidth: 1.5,
-    borderColor: '#414141',
+    // borderWidth: 1.5,
+    // borderColor: '#414141',
     borderRadius: 8,
-    // padding: 15,
-    height: 50,
+    paddingBottom: 12,
+    height: 100,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  TimeText: {fontSize: 18},
+  BoxProgress: {
+    width: 120,
+    height: 120,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  TimeText: {fontSize: 18, fontWeight: 'bold', color: '#fff'},
   Boxsubmit: {
     // flex: 1,
     flexDirection: 'row',
@@ -132,6 +174,7 @@ const styles = StyleSheet.create({
   },
   textNote: {
     fontSize: 15,
+    color: '#fff',
   },
 });
 

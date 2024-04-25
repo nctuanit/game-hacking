@@ -5,7 +5,7 @@ import {setShowMenu} from '../store/tabSlice';
 import {removeUserInfo, userInfoSelector} from '../store/userSlice';
 import {removeToken} from '../utils/AsyncStorage';
 
-function Menu() {
+function Menu({navigation}) {
   const dispath = useDispatch();
   const userInfo = useSelector(userInfoSelector);
 
@@ -14,8 +14,12 @@ function Menu() {
   };
   const handleLogout = () => {
     removeToken();
-    handleHideMenu()
+    handleHideMenu();
     dispath(removeUserInfo());
+  };
+  const handleMoveHome = () => {
+    navigation.navigate('ListSection');
+    handleHideMenu();
   };
   return (
     <View style={styles.menu}>
@@ -27,7 +31,7 @@ function Menu() {
           </Text>
         </View>
         <View style={styles.layoutBody}>
-          <TouchableOpacity style={styles.itemTab}>
+          <TouchableOpacity style={styles.itemTab} onPress={handleMoveHome}>
             <Image
               style={styles.icon}
               source={require('../assets/icon/home.png')}

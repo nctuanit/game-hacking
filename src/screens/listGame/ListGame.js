@@ -13,11 +13,14 @@ import Heading from '../../components/Heading';
 import {useDispatch, useSelector} from 'react-redux';
 import {selectorGame, setRoomGameSelector} from '../../store/gameSlice';
 import {getListGameById} from '../../services/gameServices';
+import Menu from '../../components/Menu';
+import {ismenu} from '../../store/tabSlice';
 
 function ListGame({navigation}) {
   const [listGame, setListGame] = useState([]);
   const dispath = useDispatch();
   const gameSelector = useSelector(selectorGame);
+  const isShowMenu = useSelector(ismenu);
   // console.log('id của phòng game 🚨🚨🚨:', gameSelector._id);
   useEffect(() => {
     getListGameById(gameSelector._id)
@@ -63,6 +66,7 @@ function ListGame({navigation}) {
         numColumns={2}
         style={styles.wrapperList}
       />
+      {isShowMenu ? <Menu navigation={navigation} /> : ''}
     </SafeAreaView>
   );
 }
