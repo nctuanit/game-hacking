@@ -91,7 +91,7 @@ function Login({navigation}) {
           source={require('../../assets/img/bg-avt.jpg')}>
           <Image
             style={styles.img_avt}
-            source={require('../../assets/img/avt.jpg')}
+            source={require('../../assets/img/avata.jpg')}
           />
         </ImageBackground>
         <View style={styles.boxInput}>
