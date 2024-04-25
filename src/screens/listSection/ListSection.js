@@ -48,10 +48,10 @@ function ListSection({navigation}) {
             width: '100%',
             height: 70,
             borderRadius: 8,
-            resizeMode: 'stretch',
+            resizeMode: 'stretch', // Sử dụng 'cover' hoặc giá trị khác của resizeMode tùy thuộc vào yêu cầu của bạn
           }}
           source={{
-            url: `https://api.hackinggame.tuannc.com/public/${item.image}`,
+            uri: `https://api.hackinggame.tuannc.com/public/${item.image}`,
           }}
         />
       </TouchableOpacity>

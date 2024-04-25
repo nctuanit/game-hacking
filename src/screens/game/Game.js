@@ -21,6 +21,7 @@ import {
 } from '../../services/transactionServices';
 import {format} from 'date-fns';
 import moment from 'moment';
+import { userInfoSelector } from '../../store/userSlice';
 
 function Game({navigation}) {
   const [gameinfo, setGameInfo] = useState({});
@@ -29,6 +30,7 @@ function Game({navigation}) {
   const roomsGameInfo = useSelector(selectorRoomGame);
   const [isDisableBtn, setIsDisableBtn] = useState(false);
   // console.log('thong tin phong game 😇😇😇😇:', roomsGameInfo);
+  const user = useSelector(userInfoSelector);
 
   const handleConvertTime = date => {
     if (date) {
@@ -118,7 +120,7 @@ function Game({navigation}) {
           style={{height: 230, width: 230, borderRadius: 8}}
           resizeMode="stretch"
           source={{
-            url: `https://api.hackinggame.tuannc.com/public/${gameinfo?.image}`,
+            uri: `https://api.hackinggame.tuannc.com/public/${gameinfo?.image}`,
           }}
         />
       </View>
@@ -177,7 +179,7 @@ function Game({navigation}) {
         </View>
         <View style={styles.note}>
           <Text style={styles.textNote}>
-            Khung giờ được active với tài khoản : "hoangca".
+            {`Khung giờ được active với tài khoản : "${user.username}".`}
           </Text>
           <Text style={styles.textNote}>
             Vui lòng quay đúng tài khoản à cổng game để đảm bảo kết quả.

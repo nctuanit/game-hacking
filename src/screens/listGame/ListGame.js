@@ -49,7 +49,7 @@ function ListGame({navigation}) {
             resizeMode: 'stretch',
           }}
           source={{
-            url: `https://api.hackinggame.tuannc.com/public/${item.image}`,
+            uri: `https://api.hackinggame.tuannc.com/public/${item.image}`,
           }}
         />
         <Text style={styles.title}>{item.name}</Text>
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 20,
     fontSize: 17,
-    fontWeight: 600,
+    // fontWeight: 600,
   },
 });
 
